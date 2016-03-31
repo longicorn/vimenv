@@ -1,0 +1,69 @@
+#!/bin/sh
+
+TOPDIR=~/.vimenv
+COMMAND=$1
+shift
+
+mkdir -p $TOPDIR
+mkdir -p $TOPDIR/versions
+cd $TOPDIR
+
+if [ -e src ]; then
+	:
+else
+	git clone https://github.com/vim/vim.git src
+fi
+
+versions()
+{
+	cd $TOPDIR/src
+	git tag
+}
+
+cleanup()
+{
+	cd $TOPDIR/src/src
+	make distclean 1>/dev/null 2>&1
+	git checkout master 1>/dev/null 2>&1
+	git pull origin master 1>/dev/null 2>&1
+}
+
+build()
+{
+	VERSION=$1
+	shift
+
+	INSTALL_DIR=$TOPDIR/versions/$VERSION
+
+	cleanup
+
+	cd $TOPDIR/src/src git checkout $VERSION
+	./configure --prefix=$INSTALL_DIR
+	make
+	make install
+
+	ln -s $INSTALL_DIR $TOPDIR/libexec
+}
+
+print_help()
+{
+	echo "vimenv"
+	echo "list                print installalbe vim versions"
+	echo "install <version>   install vim"
+	echo "global <version>   install vim"
+}
+
+case $COMMAND in
+	list)
+		versions
+		;;
+	install)
+		build $1
+		;;
+	global)
+		ln -s $TOPDIR/versions/$1 $TOPDIR/libexec
+		;;
+	*)
+		print_help
+		;;
+esac
