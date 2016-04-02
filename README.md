@@ -7,7 +7,7 @@ $ git clone https://github.com/longicorn/vimenv.git ~/.vimenv
 ```
 
 export PATH=~/.vimenv/bin:$PATH
-export PATH=~/.vimenv/libexec:$PATH
+export PATH=~/.vimenv/libexec/bin:$PATH
 
 # install
 print install versions list
