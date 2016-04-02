@@ -4,15 +4,11 @@ TOPDIR=~/.vimenv
 COMMAND=$1
 shift
 
-mkdir -p $TOPDIR
-mkdir -p $TOPDIR/versions
-cd $TOPDIR
-
-if [ -e src ]; then
-	:
-else
-	git clone https://github.com/vim/vim.git src
-fi
+init()
+{
+	mkdir $TOPDIR/versions
+	git clone https://github.com/vim/vim.git $TOPDIR/src
+}
 
 versions()
 {
@@ -37,12 +33,11 @@ build()
 
 	cleanup
 
-	cd $TOPDIR/src/src git checkout $VERSION
-	./configure --prefix=$INSTALL_DIR
+	cd $TOPDIR/src/src
+	git checkout $VERSION
+	./configure --prefix=$INSTALL_DIR $*
 	make
 	make install
-
-	ln -s $INSTALL_DIR $TOPDIR/libexec
 }
 
 print_help()
@@ -54,11 +49,14 @@ print_help()
 }
 
 case $COMMAND in
+	init)
+		init
+		;;
 	list)
 		versions
 		;;
 	install)
-		build $1
+		build $*
 		;;
 	global)
 		ln -s $TOPDIR/versions/$1 $TOPDIR/libexec
