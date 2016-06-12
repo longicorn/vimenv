@@ -20,8 +20,17 @@ $ vimenv list
 ```
 
 install & run
+
+vim
 ```
-$ vimenv install v7.4b.022 --with-features=huge --enable-multibyte --disable-gui --without-x --enable-cscope --enable-fontset
-$ vimenv global v7.4b.022
+$ vimenv install vim v7.4b.022 --with-features=huge --enable-multibyte --disable-gui --without-x --enable-cscope --enable-fontset
+$ vimenv global vim v7.4b.022
+$ vim
+```
+
+neovim
+```
+$ vimenv install neovim v0.1.4 --with-features=huge --enable-multibyte --disable-gui --without-x --enable-cscope --enable-fontset
+$ vimenv global vim v0.1.4
 $ vim
 ```
