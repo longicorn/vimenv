@@ -6,38 +6,83 @@ shift
 
 init()
 {
-	mkdir $TOPDIR/versions
-	git clone https://github.com/vim/vim.git $TOPDIR/src
+	mkdir -p $TOPDIR/versions
+	mkdir -p $TOPDIR/src
+	cd $TOPDIR/src
+	git clone https://github.com/vim/vim.git
+	git clone https://github.com/neovim/neovim.git
 }
 
 versions()
 {
-	cd $TOPDIR/src
+	cd $TOPDIR/src/vim
+	echo '- vim list'
+	git tag
+	echo ''
+	cd $TOPDIR/src/neovim
+	echo '- neovim list'
 	git tag
 }
 
-cleanup()
+build_vim()
 {
-	cd $TOPDIR/src/src
-	make distclean 1>/dev/null 2>&1
-	git checkout master 1>/dev/null 2>&1
-	git pull origin master 1>/dev/null 2>&1
-}
-
-build()
-{
+	TARGET='vim'
 	VERSION=$1
 	shift
 
-	INSTALL_DIR=$TOPDIR/versions/$VERSION
+	INSTALL_DIR=$TOPDIR/versions/$TARGET/$VERSION
 
-	cleanup
+	cd $TOPDIR/src/$TARGET/src
 
-	cd $TOPDIR/src/src
+	#make distclean 1>/dev/null 2>&1
+	make distclean
+	git checkout master 1>/dev/null 2>&1
+	git pull origin master 1>/dev/null 2>&1
+
 	git checkout $VERSION
 	./configure --prefix=$INSTALL_DIR $*
 	make
 	make install
+}
+
+build_neovim()
+{
+	TARGET='neovim'
+	VERSION=$1
+	shift
+
+	INSTALL_DIR=$TOPDIR/versions/$TARGET/$VERSION
+
+	cd $TOPDIR/src/$TARGET
+
+	#make distclean
+
+	git checkout $VERSION 1>/dev/null 2>&1
+	echo "make CMAKE_EXTRA_FLAGS=\"-DCMAKE_INSTALL_PREFIX=$INSTALL_DIR\""
+	make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_DIR"
+	make install
+
+	cd $INSTALL_DIR/bin
+	ln -s nvim vim
+}
+
+build()
+{
+	TARGET=$1
+	VERSION=$2
+	shift
+	shift
+
+	mkdir -p $TOPDIR/versions/$TARGET
+
+	case $TARGET in
+		vim)
+			build_vim $VERSION
+			;;
+		neovim)
+			build_neovim $VERSION
+			;;
+	esac
 }
 
 print_help()
@@ -59,7 +104,14 @@ case $COMMAND in
 		build $*
 		;;
 	global)
-		ln -s $TOPDIR/versions/$1 $TOPDIR/libexec
+		rm -f $TOPDIR/libexec
+		case $1 in
+			system)
+				;;
+			*)
+				ln -s $TOPDIR/versions/$1/$2 $TOPDIR/libexec
+				;;
+		esac
 		;;
 	*)
 		print_help
