@@ -55,7 +55,7 @@ build_neovim()
 
 	cd $TOPDIR/src/$TARGET
 
-	#make distclean
+	make distclean
 
 	git checkout $VERSION 1>/dev/null 2>&1
 	echo "make CMAKE_EXTRA_FLAGS=\"-DCMAKE_INSTALL_PREFIX=$INSTALL_DIR\""
