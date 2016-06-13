@@ -6,8 +6,10 @@ vimenv is like rbenv to vim.
 $ git clone https://github.com/longicorn/vimenv.git ~/.vimenv
 ```
 
+```
 export PATH=~/.vimenv/bin:$PATH
 export PATH=~/.vimenv/libexec/bin:$PATH
+```
 
 ```
 $ vimenv init
@@ -35,7 +37,9 @@ $ vim
 
 neovim
 ```
+# Linux & Mac
 $ vimenv install neovim v0.1.4
+
 $ vimenv global vim v0.1.4
 $ vim
 ```
