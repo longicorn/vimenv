@@ -18,9 +18,7 @@ versions()
 	cd $TOPDIR/src/vim
 	#git pull --tags 1>/dev/null 2>&1
 	echo '- vim list'
-	# git tagのsort版
-	#git --no-pager log --date-order --tags --simplify-by-decoration --pretty=format:"%d"|awk '{print $2}'|sed 's/)//g'|sed '1!G;h;$!d' ${@+"$@"}
-	git --no-pager log --date-order --tags --simplify-by-decoration --pretty=format:"%d"|awk '{print $2}'|sed 's/)//g'|tail -n 50
+	git tag --sort=committerdate|tail -n 50
 	echo ''
 	cd $TOPDIR/src/neovim
 	echo '- neovim list'
