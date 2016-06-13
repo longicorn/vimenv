@@ -16,10 +16,10 @@ init()
 versions()
 {
 	cd $TOPDIR/src/vim
-	git pull --tags 1>/dev/null 2>&1
+	#git pull --tags 1>/dev/null 2>&1
 	echo '- vim list'
 	# git tagのsort版
-	git --no-pager log --date-order --tags --simplify-by-decoration --pretty=format:"%d"|awk '{print $2}'|sed 's/)//g'
+	git --no-pager log --date-order --tags --simplify-by-decoration --pretty=format:"%d"|awk '{print $2}'|sed 's/)//g'|sed '1!G;h;$!d' ${@+"$@"}
 	echo ''
 	cd $TOPDIR/src/neovim
 	echo '- neovim list'
