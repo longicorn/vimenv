@@ -13,7 +13,7 @@ init()
 	git clone https://github.com/neovim/neovim.git
 }
 
-versions()
+install_list()
 {
 	cd $TOPDIR/src/vim
 	#git pull --tags 1>/dev/null 2>&1
@@ -23,6 +23,16 @@ versions()
 	cd $TOPDIR/src/neovim
 	echo '- neovim list'
 	git tag
+}
+
+versions()
+{
+	echo "install list"
+	echo "- vim"
+	ls $TOPDIR/versions/vim
+	echo ''
+	echo "- neovim"
+	ls $TOPDIR/versions/neovim
 }
 
 build_vim()
@@ -121,7 +131,7 @@ case $COMMAND in
 		init
 		;;
 	list)
-		versions
+		install_list
 		;;
 	install)
 		build $*
@@ -135,6 +145,9 @@ case $COMMAND in
 				ln -s $TOPDIR/versions/$1/$2 $TOPDIR/libexec
 				;;
 		esac
+		;;
+	versions)
+		versions
 		;;
 	*)
 		print_help
