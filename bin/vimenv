@@ -34,15 +34,25 @@ build_vim()
 
 	cd $TOPDIR/src/$TARGET/src
 
-	#make distclean 1>/dev/null 2>&1
-	make distclean
+	make distclean 1>/dev/null 2>&1
 	git checkout master 1>/dev/null 2>&1
 	git pull origin master 1>/dev/null 2>&1
+	git pull tags 1>/dev/null 2>&1
 
-	git checkout $VERSION
-	./configure --prefix=$INSTALL_DIR $*
-	make
-	make install
+	git checkout $VERSION 1>/dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		return 1
+	fi
+
+	OPT="--disable-gui --without-x"
+	if [ `uname`=='Darwin' ]; then
+		OPT="$OPT --disable-darwin"
+	fi
+
+	./configure --prefix=$INSTALL_DIR $OPT $* && make && make install
+	if [ $? -ne 0 ]; then
+		return 1
+	fi
 }
 
 build_neovim()
@@ -55,12 +65,17 @@ build_neovim()
 
 	cd $TOPDIR/src/$TARGET
 
-	make distclean
+	make distclean 1>/dev/null 2>&1
 
 	git checkout $VERSION 1>/dev/null 2>&1
-	echo "make CMAKE_EXTRA_FLAGS=\"-DCMAKE_INSTALL_PREFIX=$INSTALL_DIR\""
-	make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_DIR"
-	make install
+	if [ $? -ne 0 ]; then
+		return 1
+	fi
+
+	make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_DIR" $* && make install
+	if [ $? -ne 0 ]; then
+		return 1
+	fi
 
 	cd $INSTALL_DIR/bin
 	ln -s nvim vim
@@ -77,12 +92,19 @@ build()
 
 	case $TARGET in
 		vim)
-			build_vim $VERSION
+			build_vim $VERSION $*
 			;;
 		neovim)
-			build_neovim $VERSION
+			build_neovim $VERSION $*
 			;;
 	esac
+
+	INSTALL_DIR=$TOPDIR/versions/$TARGET/$VERSION
+	if [ $? -ne 0 ]; then
+		cd $TOPDIR
+		rm -rf $INSTALL_DIR
+		return 1
+	fi
 }
 
 print_help()
