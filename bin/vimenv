@@ -67,6 +67,8 @@ build_vim()
 	VERSION=$1
 	shift
 
+	echo "$TARGET($VERSION) install start"
+
 	INSTALL_DIR=$TOPDIR/versions/$TARGET/$VERSION
 
 	update 'vim'
@@ -82,10 +84,18 @@ build_vim()
 		OPT="$OPT --disable-darwin"
 	fi
 
-	./configure --prefix=$INSTALL_DIR $OPT $* && make && make install
+	rm -f $TOPDIR/$TARGET.install.log
+	./configure --prefix=$INSTALL_DIR $OPT $* > $TOPDIR/$TARGET.install.log 2>&1 && \
+	make >> $TOPDIR/$TARGET.install.log 2>&1 && \
+	make install >> $TOPDIR/$TARGET.install.log 2>&1 && \
+
 	if [ $? -ne 0 ]; then
+		echo "Install faild!"
+		echo "See logfile:$TOPDIR/$TARGET.install.log"
 		return 1
 	fi
+	rm -f $TOPDIR/$TARGET.install.log
+	echo "Install success"
 }
 
 build_neovim()
@@ -93,6 +103,8 @@ build_neovim()
 	TARGET='neovim'
 	VERSION=$1
 	shift
+
+	echo "$TARGET($VERSION) install start"
 
 	INSTALL_DIR=$TOPDIR/versions/$TARGET/$VERSION
 
@@ -106,10 +118,17 @@ build_neovim()
 		return 1
 	fi
 
-	make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_DIR" $* && make install
+	rm -f $TOPDIR/$TARGET.install.log
+	make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_DIR" $* > $TOPDIR/$TARGET.install.log 2>&1 && \
+	make install >& $TOPDIR/$TARGET.install.log
+
 	if [ $? -ne 0 ]; then
+		echo "Install faild!"
+		echo "See logfile:$TOPDIR/$TARGET.install.log"
 		return 1
 	fi
+	rm -f $TOPDIR/$TARGET.install.log
+	echo "Install success"
 
 	cd $INSTALL_DIR/bin
 	ln -s nvim vim
