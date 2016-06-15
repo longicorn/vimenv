@@ -152,15 +152,19 @@ print_help()
 
 case $1 in
 	init)
+		shift
 		init
 		;;
 	list)
+		shift
 		install_list
 		;;
 	install)
+		shift
 		build $*
 		;;
 	global)
+		shift
 		rm -f $TOPDIR/libexec
 		case $1 in
 			system)
@@ -171,9 +175,11 @@ case $1 in
 		esac
 		;;
 	update)
+		shift
 		update 'all'
 		;;
 	versions)
+		shift
 		versions
 		;;
 	*)
