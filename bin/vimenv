@@ -67,9 +67,13 @@ build_vim()
 	VERSION=$1
 	shift
 
-	echo "$TARGET($VERSION) install start"
-
 	INSTALL_DIR=$TOPDIR/versions/$TARGET/$VERSION
+	if [ -e $INSTALL_DIR ]; then
+		echo "$TARGET($VERSION) installed"
+		return 1
+	fi
+
+	echo "$TARGET($VERSION) install start"
 
 	update 'vim'
 
