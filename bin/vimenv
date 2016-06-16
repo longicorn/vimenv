@@ -81,7 +81,7 @@ build_vim()
 
 	OPT="--disable-gui --without-x --enable-multibyte"
 	if [ `uname`=='Darwin' ]; then
-		OPT="$OPT --disable-darwin --enable-multibyte --with-tlib=ncurse"
+		OPT="$OPT --disable-darwin --enable-multibyte"
 	fi
 
 	rm -f $TOPDIR/$TARGET.install.log
