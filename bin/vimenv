@@ -141,6 +141,7 @@ build()
 	shift
 	shift
 
+	INSTALL_DIR=$TOPDIR/versions/$TARGET/$VERSION
 	if [ -e $INSTALL_DIR ]; then
 		echo "$TARGET($VERSION) installed"
 		return 1
@@ -157,7 +158,6 @@ build()
 			;;
 	esac
 
-	INSTALL_DIR=$TOPDIR/versions/$TARGET/$VERSION
 	if [ $? -ne 0 ]; then
 		cd $TOPDIR
 		rm -rf $INSTALL_DIR
