@@ -2,6 +2,24 @@
 
 TOPDIR=~/.vimenv
 
+cleanup()
+{
+	TARGET=$1
+	shift
+	echo "cleanup $TARGET..."
+
+	num=`ls $TOPDIR/versions/$TARGET|wc -l`
+	i=1
+	for dir in `ls $TOPDIR/versions/$TARGET`; do
+		if [ $i -lt $num ]; then
+			echo "rm -rf $TOPDIR/versions/$TARGET/$dir"
+			rm -rf $TOPDIR/versions/$TARGET/$dir
+		fi
+		i=`expr $i + 1`
+	done
+	echo "done!\n"
+}
+
 init()
 {
 	mkdir -p $TOPDIR/versions
@@ -141,6 +159,11 @@ build()
 	shift
 	shift
 
+	if [ $TARGET != "vim" -a $TARGET != "neovim" ]; then
+		echo "target is vim/neovim"
+		return 1
+	fi
+
 	INSTALL_DIR=$TOPDIR/versions/$TARGET/$VERSION
 	if [ -e $INSTALL_DIR ]; then
 		echo "$TARGET($VERSION) installed"
@@ -168,6 +191,7 @@ build()
 print_help()
 {
 	echo "vimenv command ..."
+	echo "cleanup                      delete old versions"
 	echo "list                         print installalbe vim versions"
 	echo "install <target> <version>   install vim"
 	echo "global  <target> <version>   use vim"
@@ -175,6 +199,11 @@ print_help()
 }
 
 case $1 in
+	cleanup)
+		echo "cleanup start..."
+		cleanup 'vim'
+		cleanup 'neovim'
+		;;
 	init)
 		shift
 		init
