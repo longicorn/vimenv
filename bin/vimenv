@@ -35,10 +35,12 @@ install_list()
 	#git pull --tags 1>/dev/null 2>&1
 	echo '- vim list'
 	git tag --sort=committerdate|tail -n 50
+	echo "HEAD"
 	echo ''
 	cd $TOPDIR/src/neovim
 	echo '- neovim list'
 	git tag
+	echo "HEAD"
 }
 
 update_target()
@@ -103,9 +105,10 @@ build_vim()
 	fi
 
 	rm -f $TOPDIR/$TARGET.install.log
+	rm -rf $INSTALL_DIR
 	./configure --prefix=$INSTALL_DIR $OPT $* > $TOPDIR/$TARGET.install.log 2>&1 && \
 	make >> $TOPDIR/$TARGET.install.log 2>&1 && \
-	make install >> $TOPDIR/$TARGET.install.log 2>&1 && \
+	make install >> $TOPDIR/$TARGET.install.log 2>&1
 
 	if [ $? -ne 0 ]; then
 		echo "Install faild!"
@@ -137,8 +140,9 @@ build_neovim()
 	fi
 
 	rm -f $TOPDIR/$TARGET.install.log
-	make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_DIR" $* > $TOPDIR/$TARGET.install.log 2>&1 && \
-	make install >& $TOPDIR/$TARGET.install.log
+	rm -rf $INSTALL_DIR
+	CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_DIR" make $* > $TOPDIR/$TARGET.install.log 2>&1 && \
+	make install >> $TOPDIR/$TARGET.install.log 2>&1
 
 	if [ $? -ne 0 ]; then
 		echo "Install faild!"
