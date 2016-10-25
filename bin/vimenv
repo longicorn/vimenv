@@ -201,6 +201,7 @@ print_help()
 	echo "install <target> <version>   install vim"
 	echo "global  <target> <version>   use vim"
 	echo "update                       update"
+	echo "versions                     print install versions"
 }
 
 case $1 in
