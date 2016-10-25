@@ -32,12 +32,12 @@ install & run
 vim
 ```
 # Linux
-$ vimenv install vim v7.4b.022 --with-features=huge --enable-cscope --enable-fontset
+$ vimenv install vim v8.0.0046 --with-features=huge --enable-cscope --enable-fontset
 
 # Mac
-$ CC=gcc-4.9 vimenv install vim v7.4b.022 --with-features=huge  --enable-cscope --enable-fontset
+$ CC=gcc-4.9 vimenv install vim v8.0.0046 --with-features=huge  --enable-cscope --enable-fontset
 
-$ vimenv global vim v7.4b.022
+$ vimenv global vim v8.0.0046
 $ vim
 ```
 
@@ -54,4 +54,27 @@ use system vi
 ```
 $ vimenv global vim system
 $ vimenv global neovim system
+```
+
+## install other version
+vim
+```
+$ vimenv install vim HEAD
+$ vimenv install vim <git hash id>
+```
+
+neovim
+```
+$ vimenv install neovim HEAD
+$ vimenv install neovim <git hash id>
+```
+
+
+## install default option
+vim
+```
+$ cat default-vim
+--with-features=huge --enable-cscope --enable-fontset
+
+$ vimenv install vim v8.0.0046
 ```
