@@ -22,11 +22,14 @@ cleanup()
 
 init()
 {
+	touch $TOPDIR/default-vim
 	mkdir -p $TOPDIR/versions
 	mkdir -p $TOPDIR/src
 	cd $TOPDIR/src
 	git clone https://github.com/vim/vim.git
 	git clone https://github.com/neovim/neovim.git
+
+	echo "vim:set default vim compile options to $TOPDIR/default-vim"
 }
 
 install_list()
