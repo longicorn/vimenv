@@ -34,16 +34,25 @@ init()
 
 install_list()
 {
-	cd $TOPDIR/src/vim
-	#git pull --tags 1>/dev/null 2>&1
-	echo '- vim list'
-	git tag --sort=committerdate|tail -n 50
-	echo "HEAD"
-	echo ''
-	cd $TOPDIR/src/neovim
-	echo '- neovim list'
-	git tag
-	echo "HEAD"
+	TARGET=$1
+	if [ -z $TARGET ]; then
+		TARGET='all'
+	fi
+
+	if [ $TARGET = 'vim' -o 'all' ]; then
+		cd $TOPDIR/src/vim
+		echo '- vim versions'
+		git tag --sort=committerdate|tail -n 5
+		echo "HEAD"
+		echo ''
+	fi
+
+	if [ $TARGET = 'neovim' -o 'all' ]; then
+		cd $TOPDIR/src/neovim
+		echo '- neovim versions'
+		git tag --sort=committerdate|tail -n 5
+		echo "HEAD"
+	fi
 }
 
 update_target()
@@ -200,7 +209,7 @@ print_help()
 {
 	echo "vimenv command ..."
 	echo "cleanup                      delete old versions"
-	echo "list                         print installalbe vim versions"
+	echo "list  <target>               print installalbe vim versions"
 	echo "install <target> <version>   install vim"
 	echo "global  <target> <version>   use vim"
 	echo "update                       update"
@@ -219,7 +228,7 @@ case $1 in
 		;;
 	list)
 		shift
-		install_list
+		install_list $*
 		;;
 	install)
 		shift
