@@ -87,10 +87,10 @@ versions()
 {
 	echo "install list"
 	echo "- vim"
-	ls $TOPDIR/versions/vim
+	ls $TOPDIR/versions/vim 2>/dev/null
 	echo ''
 	echo "- neovim"
-	ls $TOPDIR/versions/neovim
+	ls $TOPDIR/versions/neovim 2>/dev/null
 }
 
 build_vim()
