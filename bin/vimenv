@@ -119,7 +119,7 @@ build_vim()
 		OPT="$OPT --disable-darwin --enable-multibyte"
 	fi
 
-	DEFAULT_OPT=`cat $TOPDIR/default-vim 2> file`
+	DEFAULT_OPT=`cat $TOPDIR/default-vim 2>/dev/null`
 
 	rm -f $TOPDIR/$TARGET.install.log
 	make distclean 1>/dev/null 2>&1
