@@ -42,7 +42,7 @@ install_list()
 	if [ $TARGET = 'vim' -o 'all' ]; then
 		cd $TOPDIR/src/vim
 		echo '- vim versions'
-		git tag|tail -n 5
+		git tag -l --sort=version:refname "v*"|tail -n 5
 		echo "HEAD"
 		echo ''
 	fi
@@ -50,7 +50,7 @@ install_list()
 	if [ $TARGET = 'neovim' -o 'all' ]; then
 		cd $TOPDIR/src/neovim
 		echo '- neovim versions'
-		git tag|tail -n 5
+		git tag -l --sort=version:refname "v*"|tail -n 5
 		echo "nightly"
 		echo "stable"
 		echo "HEAD"
