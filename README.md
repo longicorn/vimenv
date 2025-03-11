@@ -39,6 +39,8 @@ $ CC=gcc-4.9 vimenv install vim v8.0.0046 --with-features=huge  --enable-cscope 
 ```
 
 neovim
+install ninja-build, ccache
+
 ```
 # Linux & Mac
 $ vimenv install neovim v0.1.4

@@ -159,6 +159,7 @@ build_neovim()
 	fi
 
 	rm -f $TOPDIR/$TARGET.install.log
+	make distclean
 	CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_DIR" make CMAKE_BUILD_TYPE=RelWithDebInfo $* > $TOPDIR/$TARGET.install.log 2>&1 && \
 	make install >> $TOPDIR/$TARGET.install.log 2>&1
 
